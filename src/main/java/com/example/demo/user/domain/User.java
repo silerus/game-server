@@ -21,6 +21,15 @@ public final class User {
         }
     }
 
-    public UUID id()       { return id; }
-    public String email()  { return email; }
+    public String getPassword() {
+        return password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public UUID getId() {
+        return id;
+    }
 }

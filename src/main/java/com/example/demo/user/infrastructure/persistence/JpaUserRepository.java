@@ -6,8 +6,6 @@ import com.example.demo.user.domain.exception.UserAlreadyExistsException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
-
 @Repository
 public class JpaUserRepository implements UserRepository {
 
