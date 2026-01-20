@@ -4,11 +4,13 @@ import com.example.demo.user.domain.User;
 import com.example.demo.user.domain.UserRepository;
 import com.example.demo.user.domain.exception.UserAlreadyExistsException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class CreateUserUseCase {
 
     private final UserRepository userRepository;

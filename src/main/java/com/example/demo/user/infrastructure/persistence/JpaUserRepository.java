@@ -1,6 +1,5 @@
 package com.example.demo.user.infrastructure.persistence;
 
-
 import com.example.demo.user.domain.User;
 import com.example.demo.user.domain.UserRepository;
 import com.example.demo.user.domain.exception.UserAlreadyExistsException;
@@ -11,8 +10,20 @@ import java.util.UUID;
 
 @Repository
 public class JpaUserRepository implements UserRepository {
+
+    private final JpaUserRepositoryInterface jpaRepo;
+    private final UserMapper mapper;
+
+    public JpaUserRepository(JpaUserRepositoryInterface jpaRepo, UserMapper mapper) {
+        this.jpaRepo = jpaRepo;
+        this.mapper = mapper;
+    }
+
     @Override
     public @NotNull User createUser(User user) throws UserAlreadyExistsException {
-        return new User(new UUID(123,321),"123","123");
+        UserJpaEntity entity = mapper.toJpaEntity(user);
+        entity.setRole(Role.USER);
+        UserJpaEntity savedEntity = jpaRepo.save(entity);
+        return mapper.toDomain(savedEntity);
     }
 }
