@@ -57,13 +57,31 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-liquibase</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
     </dependencies>
 
@@ -73,6 +91,27 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <configuration>
+                    <changeLogFile>src/main/resources/db/changelog/db.changelog-master.yaml</changeLogFile>
+                    <driver>org.postgresql.Driver</driver>
+                    <url>${SPRING_DATASOURCE_URL}</url>
+                    <username>${SPRING_DATASOURCE_USERNAME}</username>
+                    <password>${SPRING_DATASOURCE_PASSWORD}</password>
+                    <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+                    <databaseChangeLogTableName>DATABASECHANGELOG</databaseChangeLogTableName>
+                    <databaseChangeLogLockTableName>DATABASECHANGELOGLOCK</databaseChangeLogLockTableName>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>42.7.3</version>  <!-- актуальная на 2026 -->
+                    </dependency>
+                </dependencies>
+            </plugin>
 		</plugins>
 	</build>
 
