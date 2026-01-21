@@ -1,5 +1,10 @@
 package com.example.demo.user.domain;
 
+import com.example.demo.user.domain.exception.InvalidEmailException;
+import com.example.demo.user.domain.exception.InvalidIdException;
+import com.example.demo.user.domain.exception.InvalidPasswordException;
+
+import java.util.Objects;
 import java.util.UUID;
 
 public final class User {
@@ -9,16 +14,18 @@ public final class User {
     private final transient String password;
 
     public User(UUID id, String email, String password) {
+        if (id == null) {
+            throw new InvalidIdException("ID не может быть пустым");
+        }
+        if (email == null || email.isBlank()) {
+            throw new InvalidEmailException("Email не может быть пустым");
+        }
+        if (password == null || password.isBlank()) {
+            throw new InvalidPasswordException("Password hash не может быть пустым");
+        }
         this.id = id;
         this.email = email;
         this.password = password;
-
-        if (email == null || email.isBlank()) {
-            throw new IllegalArgumentException("Email cannot be empty");
-        }
-        if (password == null || !password.contains("@")) {
-            throw new IllegalArgumentException("Password is invalid");
-        }
     }
 
     public String getPassword() {

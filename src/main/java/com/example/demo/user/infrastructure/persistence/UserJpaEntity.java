@@ -24,7 +24,7 @@ public class UserJpaEntity {
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)
     @Column(name = "role", nullable = false)
-    private Role role;
+    private Role role = Role.USER;
 
     public UserJpaEntity() {}
 

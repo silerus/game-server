@@ -20,7 +20,6 @@ public class JpaUserRepository implements UserRepository {
     @Override
     public @NotNull User createUser(User user) throws UserAlreadyExistsException {
         UserJpaEntity entity = mapper.toJpaEntity(user);
-        entity.setRole(Role.USER);
         UserJpaEntity savedEntity = jpaRepo.save(entity);
         return mapper.toDomain(savedEntity);
     }
