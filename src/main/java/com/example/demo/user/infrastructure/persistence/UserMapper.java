@@ -11,7 +11,7 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface UserMapper {
 
-    @Mapping(target = "id", source = "id")         // если имена совпадают → можно не писать
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "email", source = "email")
     @Mapping(target = "password_hash", source = "password")
     UserJpaEntity toJpaEntity(User domain);

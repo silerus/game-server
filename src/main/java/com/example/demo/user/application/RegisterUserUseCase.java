@@ -11,16 +11,16 @@ import java.util.UUID;
 
 @Service
 @Transactional
-public class CreateUserUseCase {
+public class RegisterUserUseCase {
 
     private final UserRepository userRepository;
 
-    public CreateUserUseCase(UserRepository userRepository) {
+    public RegisterUserUseCase(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public User createUser(String email, String password) throws UserAlreadyExistsException {
+    public User register(String email, String password) throws UserAlreadyExistsException {
         User user = new User(UUID.randomUUID(), email, password);
-        return Objects.requireNonNull(this.userRepository.createUser(user), "User не может быть null");
+        return Objects.requireNonNull(this.userRepository.register(user), "User не может быть null");
     }
 }

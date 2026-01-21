@@ -19,7 +19,7 @@ public class JpaUserRepository implements UserRepository {
     }
 
     @Override
-    public @NotNull User createUser(User user) throws UserAlreadyExistsException {
+    public @NotNull User register(User user) throws UserAlreadyExistsException {
         UserJpaEntity entity = mapper.toJpaEntity(user);
         try {
             UserJpaEntity saved = jpaRepo.saveAndFlush(entity);

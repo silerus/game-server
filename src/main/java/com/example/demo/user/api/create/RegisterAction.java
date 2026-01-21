@@ -1,6 +1,6 @@
 package com.example.demo.user.api.create;
 
-import com.example.demo.user.application.CreateUserUseCase;
+import com.example.demo.user.application.RegisterUserUseCase;
 import com.example.demo.user.domain.User;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -12,20 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class CreateUserAction {
+public class RegisterAction {
 
-    private final CreateUserUseCase createUserUseCase;
+    private final RegisterUserUseCase registerUserUseCase;
     private final PasswordEncoder passwordEncoder;
 
-    public CreateUserAction(CreateUserUseCase createUserUseCase, PasswordEncoder passwordEncoder) {
-        this.createUserUseCase = createUserUseCase;
+    public RegisterAction(RegisterUserUseCase registerUserUseCase, PasswordEncoder passwordEncoder) {
+        this.registerUserUseCase = registerUserUseCase;
         this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/users")
-    public ResponseEntity<@org.jetbrains.annotations.NotNull User> createUser(@RequestBody @NotNull @Valid CreateUserDTO dto)  {
+    public ResponseEntity<@org.jetbrains.annotations.NotNull User> register(@RequestBody @NotNull @Valid RegisterDTO dto)  {
         String encodedPassword = passwordEncoder.encode(dto.password());
-        User user = createUserUseCase.createUser(dto.email(), encodedPassword);
+        User user = registerUserUseCase.register(dto.email(), encodedPassword);
         return ResponseEntity.ok(user);
     }
 }
