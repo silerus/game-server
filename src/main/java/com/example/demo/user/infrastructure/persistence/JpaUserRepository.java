@@ -26,6 +26,7 @@ public class JpaUserRepository implements UserRepository {
             UserJpaEntity saved = jpaRepo.saveAndFlush(entity);
             return mapper.toDomain(saved);
         } catch (DataIntegrityViolationException e) {
+            // todo проверить что ошибка именно про поле email
             throw new UserAlreadyExistsException("Пользователь с таким email уже существует");
         }
     }
