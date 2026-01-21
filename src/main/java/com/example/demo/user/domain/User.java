@@ -3,6 +3,7 @@ package com.example.demo.user.domain;
 import com.example.demo.user.domain.exception.InvalidEmailException;
 import com.example.demo.user.domain.exception.InvalidIdException;
 import com.example.demo.user.domain.exception.InvalidPasswordException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -28,6 +29,7 @@ public final class User {
         this.password = password;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

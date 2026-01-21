@@ -1,4 +1,9 @@
 package com.example.demo.user.domain.exception;
 
-public class UserAlreadyExistsException extends RuntimeException {
+import com.example.demo.infrastructure.exceptions.DomainInvariantViolation;
+
+public class UserAlreadyExistsException extends DomainInvariantViolation {
+    public UserAlreadyExistsException(String message) {
+        super(message);
+    }
 }

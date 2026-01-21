@@ -4,6 +4,7 @@ import com.example.demo.user.domain.User;
 import com.example.demo.user.domain.UserRepository;
 import com.example.demo.user.domain.exception.UserAlreadyExistsException;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -20,7 +21,11 @@ public class JpaUserRepository implements UserRepository {
     @Override
     public @NotNull User createUser(User user) throws UserAlreadyExistsException {
         UserJpaEntity entity = mapper.toJpaEntity(user);
-        UserJpaEntity savedEntity = jpaRepo.save(entity);
-        return mapper.toDomain(savedEntity);
+        try {
+            UserJpaEntity saved = jpaRepo.saveAndFlush(entity);
+            return mapper.toDomain(saved);
+        } catch (DataIntegrityViolationException e) {
+            throw new UserAlreadyExistsException("Пользователь с таким email уже существует");
+        }
     }
 }

@@ -18,5 +18,6 @@ public interface UserMapper {
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "email", source = "email")
+    @Mapping(target = "password", source = "password_hash")
     User toDomain(UserJpaEntity entity);
 }
