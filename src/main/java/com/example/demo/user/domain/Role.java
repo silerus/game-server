@@ -1,4 +1,4 @@
-package com.example.demo.user.infrastructure.persistence;
+package com.example.demo.user.domain;
 
 import org.springframework.security.core.GrantedAuthority;
 

@@ -14,10 +14,12 @@ public interface UserMapper {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "email", source = "email")
     @Mapping(target = "password_hash", source = "password")
+    @Mapping(target = "role", source = "role")
     UserJpaEntity toJpaEntity(User domain);
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "email", source = "email")
     @Mapping(target = "password", source = "password_hash")
+    @Mapping(target = "role", source = "role")
     User toDomain(UserJpaEntity entity);
 }

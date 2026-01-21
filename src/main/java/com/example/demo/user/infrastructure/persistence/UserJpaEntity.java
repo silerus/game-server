@@ -1,5 +1,6 @@
 package com.example.demo.user.infrastructure.persistence;
 
+import com.example.demo.user.domain.Role;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.dialect.type.PostgreSQLEnumJdbcType;
@@ -24,7 +25,7 @@ public class UserJpaEntity {
     @Enumerated(EnumType.STRING)
     @JdbcType(PostgreSQLEnumJdbcType.class)
     @Column(name = "role", nullable = false)
-    private Role role = Role.USER;
+    private Role role;
 
     public UserJpaEntity() {}
 
