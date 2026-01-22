@@ -23,12 +23,16 @@ import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 
 import javax.crypto.SecretKey;
+import java.io.Console;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 
 @Configuration
@@ -60,10 +64,11 @@ public class SecurityConfig {
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt
                                 .decoder(jwtDecoder())
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
                         )
                 )
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint()) // для красивого 401
+                        .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                 );
 
         return http.build();
@@ -72,28 +77,25 @@ public class SecurityConfig {
     @Bean
     public JwtDecoder jwtDecoder() {
         byte[] keyBytes = jwtSigningKey.getBytes(StandardCharsets.UTF_8);
-
-        System.out.println("[JwtDecoder] Длина ключа в байтах: " + keyBytes.length);
-        System.out.println("[JwtDecoder] Первые 20 символов ключа: " + jwtSigningKey.substring(0, Math.min(20, jwtSigningKey.length())));
-        System.out.println("[JwtDecoder] Последние 20 символов ключа: " + jwtSigningKey.substring(Math.max(0, jwtSigningKey.length() - 20)));
-
         SecretKey secretKey = Keys.hmacShaKeyFor(keyBytes);
-
         NimbusJwtDecoder decoder = NimbusJwtDecoder.withSecretKey(secretKey)
                 .macAlgorithm(MacAlgorithm.HS512)
                 .build();
-
         return token -> {
-            System.out.println("[JwtDecoder] Получен токен для проверки: " + token.substring(0, Math.min(40, token.length())) + "...");
-            try {
-                Jwt jwt = decoder.decode(token);
-                System.out.println("[JwtDecoder] Успешно: sub = " + jwt.getSubject());
-                return jwt;
-            } catch (Exception e) {
-                System.out.println("[JwtDecoder] Ошибка: " + e.getClass().getSimpleName() + " → " + e.getMessage());
-                throw e;
-            }
+            Jwt jwt = decoder.decode(token);
+            return jwt;
         };
+    }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        grantedAuthoritiesConverter.setAuthoritiesClaimName("role");
+        grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+        converter.setPrincipalClaimName("sub");
+        return converter;
     }
 
     @Bean

@@ -28,15 +28,15 @@ public class LoginAction {
     @PostMapping("/auth/login")
     public ResponseEntity<@org.jetbrains.annotations.NotNull JwtAuthenticationResponse> login(@RequestBody @NotNull @Valid LoginDTO dto) {
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.isAuthenticated()) {
-            Jwt jwt = (Jwt) auth.getPrincipal();
-            String email = jwt.getSubject();
-            String id = jwt.getClaim("id");
-            String role = jwt.getClaimAsString("role");
-            Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
-            System.out.println("Роли: " + authorities);
-        }
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth != null && auth.isAuthenticated()) {
+//            Jwt jwt = (Jwt) auth.getPrincipal();
+//            String email = jwt.getSubject();
+//            String id = jwt.getClaim("id");
+//            String role = jwt.getClaimAsString("role");
+//            Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+//            System.out.println("Роли: " + authorities);
+//        }
 
         //Todo сделать ограничение в несколько попыток, прикрутить хранилище с блек листом
         //Todo прикрутить права вычисляемые по битовой маске

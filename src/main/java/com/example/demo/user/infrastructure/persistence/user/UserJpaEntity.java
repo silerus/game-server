@@ -1,4 +1,4 @@
-package com.example.demo.user.infrastructure.persistence;
+package com.example.demo.user.infrastructure.persistence.user;
 
 import com.example.demo.user.domain.Role;
 import jakarta.persistence.*;
