@@ -7,6 +7,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+import java.util.UUID;
+
 @Service
 public class UserService {
     private final AuthenticationManager authenticationManager;
@@ -28,5 +31,13 @@ public class UserService {
     public User getCurrentUser() {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         return getByEmail(username);
+    }
+
+    public User saveUser(User user) {
+        return Objects.requireNonNull(this.userRepository.save(user), "User не может быть null");
+    }
+
+    public User findById(UUID id) {
+        return this.userRepository.findById(id);
     }
 }

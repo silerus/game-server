@@ -2,6 +2,9 @@ package com.example.demo.infrastructure.security;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.UUID;
+
 @Repository
 public class RefreshTokenRepository {
 
@@ -11,8 +14,12 @@ public class RefreshTokenRepository {
         this.redisRepo = redisRepo;
     }
 
-    public void save(RefreshToken refreshToken) {
-        redisRepo.save(refreshToken);
+    public RefreshToken save(RefreshToken refreshToken) {
+        return redisRepo.save(refreshToken);
+    }
+
+    public List<RefreshToken> findAllByUserId(UUID userId) {
+        return redisRepo.findAllByUserId(userId);
     }
 
     public RefreshToken findByToken(String token) {
@@ -20,7 +27,7 @@ public class RefreshTokenRepository {
                 .orElse(null);
     }
 
-    public void deleteByToken(String token) {
-        redisRepo.deleteByToken(token);
+    public void delete(RefreshToken refreshToken) {
+        redisRepo.delete(refreshToken);
     }
 }

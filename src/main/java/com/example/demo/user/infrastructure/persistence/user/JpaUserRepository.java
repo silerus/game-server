@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Repository
 public class JpaUserRepository implements UserRepository {
 
@@ -36,5 +39,12 @@ public class JpaUserRepository implements UserRepository {
         UserJpaEntity entity = jpaRepo.findByEmail(email);
         if (entity == null) throw new UserNotFoundException("Пользователь не найден");
         return mapper.toDomain(entity);
+    }
+
+    @Override
+    public @NotNull User findById(UUID id) throws UserNotFoundException {
+        Optional<UserJpaEntity> entity = jpaRepo.findById(id);
+        if (entity == null) throw new UserNotFoundException("Пользователь не найден");
+        return mapper.toDomain(entity.get());
     }
 }
