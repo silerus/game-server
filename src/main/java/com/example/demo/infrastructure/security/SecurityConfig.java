@@ -29,10 +29,8 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.web.SecurityFilterChain;
 
 import javax.crypto.SecretKey;
-import java.io.Console;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Set;
 
 @Configuration

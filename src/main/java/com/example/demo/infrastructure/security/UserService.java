@@ -4,7 +4,6 @@ import com.example.demo.user.domain.User;
 import com.example.demo.user.domain.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -26,11 +25,6 @@ public class UserService {
 
     public User getByEmail(String email) {
         return userRepository.findByEmail(email);
-    }
-
-    public User getCurrentUser() {
-        var username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return getByEmail(username);
     }
 
     public User saveUser(User user) {

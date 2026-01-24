@@ -44,7 +44,7 @@ public class JpaUserRepository implements UserRepository {
     @Override
     public @NotNull User findById(UUID id) throws UserNotFoundException {
         Optional<UserJpaEntity> entity = jpaRepo.findById(id);
-        if (entity == null) throw new UserNotFoundException("Пользователь не найден");
+        if (!entity.isPresent()) throw new UserNotFoundException("Пользователь не найден");
         return mapper.toDomain(entity.get());
     }
 }

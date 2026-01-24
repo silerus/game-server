@@ -23,7 +23,6 @@ public class LoginUserUseCase {
     public TokenPair login(String email, String password) throws UserNotFoundException {
         userService.authenticate(email, password);
         User user = userService.getByEmail(email);
-        TokenPair token = jwtService.generateToken(user);
-        return token;
+        return jwtService.generateToken(user);
     }
 }

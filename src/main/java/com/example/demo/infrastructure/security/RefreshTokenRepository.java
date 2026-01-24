@@ -27,7 +27,7 @@ public class RefreshTokenRepository {
                 .orElse(null);
     }
 
-    public void delete(RefreshToken refreshToken) {
-        redisRepo.delete(refreshToken);
+    public void deleteAll(List<RefreshToken> tokens) {
+        redisRepo.deleteAll(tokens);
     }
 }
