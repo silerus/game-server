@@ -13,7 +13,7 @@ public final class User {
     private final UUID id;
     private final String email;
     private final transient String password;
-    private Role role;
+    private final Role role;
 
     public User(UUID id, String email, String password, Role role) {
         if (id == null) {

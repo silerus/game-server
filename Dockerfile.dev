@@ -6,6 +6,8 @@ COPY pom.xml .
 COPY .mvn .mvn
 COPY mvnw .
 
+RUN yum install -y make
+
 RUN ./mvnw dependency:go-offline -B
 
 EXPOSE 8080 5005
