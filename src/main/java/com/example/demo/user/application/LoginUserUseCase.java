@@ -21,8 +21,14 @@ public class LoginUserUseCase {
     }
 
     public TokenPair login(String email, String password) throws UserNotFoundException {
-        userService.authenticate(email, password);
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("Email must not be null or empty");
+        }
+        if (password == null || password.isBlank()) {
+            throw new IllegalArgumentException("Password must not be null or empty");
+        }
         User user = userService.getByEmail(email);
+        userService.authenticate(email, password);
         return jwtService.generateToken(user);
     }
 }

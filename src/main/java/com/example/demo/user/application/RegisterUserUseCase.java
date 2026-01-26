@@ -23,6 +23,12 @@ public class RegisterUserUseCase {
     }
 
     public User register(String email, String password) throws UserAlreadyExistsException {
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("Email must not be null or empty");
+        }
+        if (password == null || password.isBlank()) {
+            throw new IllegalArgumentException("Password must not be null or empty");
+        }
         String encodedPassword = passwordEncoder.encode(password);
         Role role = Role.USER;
         User user = new User(UUID.randomUUID(), email, encodedPassword, role);

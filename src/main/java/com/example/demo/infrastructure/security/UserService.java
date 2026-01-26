@@ -2,6 +2,7 @@ package com.example.demo.infrastructure.security;
 
 import com.example.demo.user.domain.User;
 import com.example.demo.user.domain.UserRepository;
+import com.example.demo.user.domain.exception.UserNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class UserService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
     }
 
-    public User getByEmail(String email) {
+    public User getByEmail(String email) throws UserNotFoundException {
         return userRepository.findByEmail(email);
     }
 

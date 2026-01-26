@@ -15,6 +15,9 @@ public class RefreshTokenUseCase {
     }
 
     public TokenPair refreshToken(String refreshToken) {
+        if (refreshToken == null || refreshToken.isBlank()) {
+            throw new IllegalArgumentException("RefreshToken must not be null or empty");
+        }
         return jwtService.refreshToken(refreshToken);
     }
 }
