@@ -1,6 +1,6 @@
 package com.example.demo.user.application;
 
-import com.example.demo.infrastructure.security.SecurityConfig;
+import com.example.demo.config.SecurityConfig;
 import com.example.demo.infrastructure.security.UserService;
 import com.example.demo.user.domain.Role;
 import com.example.demo.user.domain.User;
@@ -8,7 +8,6 @@ import com.example.demo.user.domain.exception.UserAlreadyExistsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;

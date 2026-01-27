@@ -1,6 +1,6 @@
 package com.example.demo.user.application;
 
-import com.example.demo.infrastructure.security.SecurityConfig;
+import com.example.demo.config.SecurityConfig;
 import com.example.demo.infrastructure.security.UserService;
 import com.example.demo.user.domain.Role;
 import com.example.demo.user.domain.User;

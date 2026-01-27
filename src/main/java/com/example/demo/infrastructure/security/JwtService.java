@@ -5,6 +5,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -24,10 +27,26 @@ public class JwtService {
     private String jwtSigningKey;
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserService userService;
+    private final JwtDecoder jwtDecoder;
 
-    public JwtService(RefreshTokenRepository refreshTokenRepository, UserService userService) {
+    public JwtService(RefreshTokenRepository refreshTokenRepository, UserService userService, JwtDecoder jwtDecoder) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userService = userService;
+        this.jwtDecoder = jwtDecoder;
+    }
+
+    public boolean isValidToken(String token) {
+        try {
+            Jwt jwt = jwtDecoder.decode(token);
+            return true;
+        } catch (JwtException e) {
+            return false;
+        }
+    }
+
+    public String getUserId(String token) {
+        Jwt jwt = jwtDecoder.decode(token);
+        return jwt.getId();
     }
 
     public TokenPair generateToken(User user) {
