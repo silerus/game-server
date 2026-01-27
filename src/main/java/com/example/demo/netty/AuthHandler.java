@@ -14,10 +14,12 @@ public class AuthHandler extends ChannelInboundHandlerAdapter {
 
     private final JwtService jwtService;
     private final InstanceIdentity instanceIdentity;
+    private final UserConnections userConnections;
 
-    public AuthHandler(JwtService jwtService, InstanceIdentity instanceIdentity) {
+    public AuthHandler(JwtService jwtService, InstanceIdentity instanceIdentity, UserConnections userConnections) {
         this.jwtService = jwtService;
         this.instanceIdentity = instanceIdentity;
+        this.userConnections = userConnections;
     }
 
     @Override
@@ -36,6 +38,7 @@ public class AuthHandler extends ChannelInboundHandlerAdapter {
             String userId = jwtService.getUserId(token);
             System.out.println("userID " + userId);
             ctx.channel().attr(AttributeKey.valueOf("userId")).set(userId);
+            userConnections.addUserConnection(userId, ctx);
         }
         super.channelRead(ctx, msg);
     }

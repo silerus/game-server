@@ -1,5 +1,6 @@
 package com.example.demo.netty;
 
+import com.example.demo.infrastructure.utils.JsonUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -16,15 +17,16 @@ import tools.jackson.databind.node.ObjectNode;
 @ChannelHandler.Sharable
 @Component
 public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
-
-    private final ConnectionGroup connectionGroup;
     private final RabbitPublisher rabbitPublisher;
     private final InstanceIdentity instanceIdentity;
+    private final ObjectMapper mapper;
+    private final UserConnections userConnections;
 
-    public WebSocketHandler(ConnectionGroup connectionGroup, RabbitPublisher rabbitPublisher, InstanceIdentity instanceIdentity) {
-        this.connectionGroup = connectionGroup;
+    public WebSocketHandler(RabbitPublisher rabbitPublisher, InstanceIdentity instanceIdentity, JsonUtil jsonUtil, UserConnections userConnections) {
         this.rabbitPublisher = rabbitPublisher;
         this.instanceIdentity = instanceIdentity;
+        this.mapper = jsonUtil.mapper;
+        this.userConnections = userConnections;
     }
 
     @Override
@@ -34,7 +36,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
             byte[] bytes = new byte[data.readableBytes()];
             data.readBytes(bytes);
             handleBinary(channelHandlerContext, bytes);
-        }  else {
+        } else {
             System.out.println("Unsupported frame type: " + webSocketFrame.getClass());
         }
     }
@@ -42,7 +44,6 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
     protected void handleBinary(ChannelHandlerContext ctx, byte[] message) {
         System.out.println("Получено бинарное сообщение: " + message.length + " байт");
         try {
-            ObjectMapper mapper = new ObjectMapper();
             JsonNode node = mapper.readTree(message);
             String routingKey = node.has("t") ? node.get("t").asText() : null;
             if (routingKey == null) {
@@ -64,6 +65,29 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
         }
     }
 
+    public void broadcastToClients(byte[] message) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(message);
+            JsonNode usersNode = root.has("u") ? root.get("u") : null;
+            if (usersNode == null || !usersNode.isArray()) return;
+            JsonNode payloadData = root.has("p") ? root.get("p") : mapper.createObjectNode();
+            byte[] payload = mapper.writeValueAsBytes(payloadData);
+            for (JsonNode userNode : usersNode) {
+                if (userNode.isNull()) continue;
+                String userId = userNode.asText();
+                ChannelHandlerContext ctx = userConnections.getUserConnection(userId);
+                if (ctx != null && ctx.channel().isActive()) {
+                    ctx.writeAndFlush(new BinaryWebSocketFrame(
+                            Unpooled.wrappedBuffer(payload)
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     protected void sendBinary(ChannelHandlerContext ctx, byte[] message) {
         ByteBuf buf = Unpooled.wrappedBuffer(message);
@@ -73,14 +97,15 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("Клиент подключился: " + ctx.channel().remoteAddress());
-        connectionGroup.add(ctx.channel());
         super.channelActive(ctx);
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("Клиент отключился: " + ctx.channel().remoteAddress());
-        connectionGroup.remove(ctx.channel());
+        AttributeKey<String> USER_ID_KEY = AttributeKey.valueOf("userId");
+        String userId = ctx.channel().attr(USER_ID_KEY).get();
+        this.userConnections.removeUserConnection(userId);
         super.channelInactive(ctx);
     }
 
