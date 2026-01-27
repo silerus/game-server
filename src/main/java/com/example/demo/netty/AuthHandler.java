@@ -34,9 +34,8 @@ public class AuthHandler extends ChannelInboundHandlerAdapter {
                 return;
             }
             String userId = jwtService.getUserId(token);
+            System.out.println("userID " + userId);
             ctx.channel().attr(AttributeKey.valueOf("userId")).set(userId);
-            System.out.println("Handled by instance " + instanceIdentity.getId());
-            ctx.channel().attr(AttributeKey.valueOf("instanceId")).set(instanceIdentity.getId());
         }
         super.channelRead(ctx, msg);
     }

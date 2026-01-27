@@ -46,7 +46,7 @@ public class JwtService {
 
     public String getUserId(String token) {
         Jwt jwt = jwtDecoder.decode(token);
-        return jwt.getId();
+        return jwt.getSubject();
     }
 
     public TokenPair generateToken(User user) {
@@ -60,8 +60,8 @@ public class JwtService {
 
     private String generateAccessToken(User user, SecretKey key) {
         return Jwts.builder()
-                .subject(user.getEmail())
-                .claim("id", user.getId())
+                .subject(user.getId().toString())
+                .claim("email", user.getEmail())
                 .claim("role", user.getRole())
                 .issuedAt(Date.from(Instant.now()))
                 .expiration(Date.from(Instant.now().plus(15, ChronoUnit.MINUTES)))
