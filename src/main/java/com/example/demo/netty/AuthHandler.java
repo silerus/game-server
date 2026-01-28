@@ -13,12 +13,10 @@ import org.springframework.stereotype.Component;
 public class AuthHandler extends ChannelInboundHandlerAdapter {
 
     private final JwtService jwtService;
-    private final InstanceIdentity instanceIdentity;
     private final UserConnections userConnections;
 
-    public AuthHandler(JwtService jwtService, InstanceIdentity instanceIdentity, UserConnections userConnections) {
+    public AuthHandler(JwtService jwtService, UserConnections userConnections) {
         this.jwtService = jwtService;
-        this.instanceIdentity = instanceIdentity;
         this.userConnections = userConnections;
     }
 

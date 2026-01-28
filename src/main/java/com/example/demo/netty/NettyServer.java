@@ -46,10 +46,10 @@ public class NettyServer implements SmartLifecycle {
     public void start() {
         if (running) return;
         running = true;
-        String instanceQueue = "ws-instances." + instanceIdentity.getId();
-        Queue queue = new Queue(instanceQueue, false, true, true);
-        rabbitAdmin.declareQueue(queue);
-        rabbitAdmin.declareBinding(BindingBuilder.bind(queue).to(new DirectExchange("ws-instances")).with(instanceQueue));
+//        String instanceQueue = "ws-instances." + instanceIdentity.getId();
+//        Queue queue = new Queue(instanceQueue, false, true, true);
+//        rabbitAdmin.declareQueue(queue);
+//        rabbitAdmin.declareBinding(BindingBuilder.bind(queue).to(new DirectExchange("ws-instances")).with(instanceQueue));
         new Thread(() -> {
             bossGroup = new NioEventLoopGroup(1);
             workerGroup = new NioEventLoopGroup();
@@ -78,19 +78,19 @@ public class NettyServer implements SmartLifecycle {
             }
         }, "netty-server").start();
 
-        startRabbitListener(instanceQueue);
+//        startRabbitListener(instanceQueue);
     }
 
-    private void startRabbitListener(String instanceQueue) {
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        container.setConnectionFactory(rabbitTemplate.getConnectionFactory());
-        container.setQueueNames(instanceQueue);
-        container.setMessageListener(message -> {
-            byte[] body = message.getBody();
-            this.webSocketHandler.broadcastToClients(body);
-        });
-        container.start();
-    }
+//    private void startRabbitListener(String instanceQueue) {
+//        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+//        container.setConnectionFactory(rabbitTemplate.getConnectionFactory());
+//        container.setQueueNames(instanceQueue);
+//        container.setMessageListener(message -> {
+//            byte[] body = message.getBody();
+//            this.webSocketHandler.broadcastToClients(body);
+//        });
+//        container.start();
+//    }
 
     @PreDestroy
     public void stop() {
@@ -105,6 +105,7 @@ public class NettyServer implements SmartLifecycle {
         if (workerGroup != null) {
             workerGroup.shutdownGracefully();
         }
+        running = false;
     }
 
     @Override

@@ -3,12 +3,11 @@ package com.example.demo.netty;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class UserConnections {
-    private final Map<String, ChannelHandlerContext> userConnections = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, ChannelHandlerContext> userConnections = new ConcurrentHashMap<>();
 
     public void addUserConnection(String userId, ChannelHandlerContext channelHandlerContext) {
         userConnections.put(userId, channelHandlerContext);

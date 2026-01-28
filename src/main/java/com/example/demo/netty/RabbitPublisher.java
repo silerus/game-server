@@ -13,12 +13,11 @@ public class RabbitPublisher {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendIfQueueExists(String routingKey, byte[] message) {
+    public void send(byte[] message) {
         try {
             rabbitTemplate.setMandatory(false);
-            rabbitTemplate.convertAndSend("", routingKey, message);
+            rabbitTemplate.convertAndSend("", "game-events", message);
         } catch (AmqpException e) {
-            // можно логировать на DEBUG, если хочешь
             // log.debug("Message not sent, queue {} might not exist", routingKey);
         }
     }

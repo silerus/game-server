@@ -28,6 +28,7 @@
     </scm>
     <properties>
         <java.version>21</java.version>
+        <scala.binary.version>2.13</scala.binary.version>
     </properties>
     <dependencies>
         <dependency>
@@ -173,7 +174,26 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
+        <!-- Pekko typed actors -->
+        <dependency>
+            <groupId>org.apache.pekko</groupId>
+            <artifactId>pekko-actor-typed_${scala.binary.version}</artifactId>
+            <version>1.4.0</version>
+        </dependency>
 
+        <!-- Scheduler, timers, dispatchers -->
+        <dependency>
+            <groupId>org.apache.pekko</groupId>
+            <artifactId>pekko-actor_${scala.binary.version}</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.apache.pekko</groupId>
+            <artifactId>pekko-slf4j_${scala.binary.version}</artifactId>
+            <version>1.4.0</version>
+        </dependency>
     </dependencies>
 
     <build>
