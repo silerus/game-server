@@ -5,9 +5,9 @@ import com.example.demo.actor.GameCommand;
 public class PlayerEvent implements GameCommand {
     public final String playerId;
     public final String eventType;
-    public final byte[] payload;
+    public final String payload;
 
-    public PlayerEvent(String playerId, String eventType, byte[] payload) {
+    public PlayerEvent(String playerId, String eventType, String payload) {
         this.playerId = playerId;
         this.eventType = eventType;
         this.payload = payload;

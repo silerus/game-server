@@ -5,6 +5,7 @@ import com.example.demo.game.PlayerEvent;
 
 import java.util.List;
 
+@org.springframework.stereotype.Service
 public class MovementService implements Service {
     @Override
     public List<Action> getProcessTypes() {

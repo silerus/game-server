@@ -34,8 +34,10 @@ public class GameService {
             try {
                 Action action = Action.valueOf(event.eventType);
                 Service service = actions.get(action);
-                service.run(event);
-            } catch (IllegalArgumentException e) {
+                if (service != null) {
+                    service.run(event);
+                }
+            } catch (Throwable e) {
             }
         }
         playerEvents.clear();

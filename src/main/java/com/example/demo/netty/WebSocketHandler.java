@@ -52,7 +52,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
             String eventType = node.has("t") ? node.get("t").asText() : "unknown";
             JsonNode payloadNode = node.has("p") ? node.get("p") : mapper.createObjectNode();
             String userId = ctx.channel().attr(USER_ID_KEY).get();
-            gameSupervisor.tell(new PlayerEvent(userId, eventType, payloadNode.binaryValue()));
+            gameSupervisor.tell(new PlayerEvent(userId, eventType, payloadNode.toString()));
         } catch (Exception e) {
             e.printStackTrace();
         }
