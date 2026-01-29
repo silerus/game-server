@@ -1,6 +1,6 @@
 package com.example.demo.actor;
 
-import com.example.demo.game.services.GameService;
+import com.example.demo.game.GameService;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import org.apache.pekko.actor.typed.ActorSystem;

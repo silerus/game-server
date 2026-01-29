@@ -2,8 +2,8 @@ package com.example.demo.actor;
 
 import com.example.demo.game.Action;
 import com.example.demo.game.PlayerEvent;
-import com.example.demo.game.services.GameService;
-import com.example.demo.game.services.Service;
+import com.example.demo.game.GameService;
+import com.example.demo.game.commands.Command;
 import io.netty.channel.Channel;
 import org.apache.pekko.actor.Cancellable;
 import org.apache.pekko.actor.typed.Behavior;
@@ -73,8 +73,8 @@ public class PlayerActor extends AbstractBehavior<GameCommand> {
         for (PlayerEvent event : batch) {
             try {
                 Action action = Action.valueOf(event.eventType);
-                Service service = gameService.getServiceFor(action);
-                service.run(event);
+                Command handler = gameService.getHandlerFor(action);
+                handler.execute(event);
             } catch (Exception e) {
                 getContext().getLog().error("Error processing event", e);
             }

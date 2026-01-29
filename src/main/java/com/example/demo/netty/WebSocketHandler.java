@@ -1,10 +1,8 @@
 package com.example.demo.netty;
 
 import com.example.demo.actor.GameCommand;
-import com.example.demo.actor.GameSupervisor;
 import com.example.demo.actor.PlayerActor;
 import com.example.demo.game.PlayerEvent;
-import com.example.demo.game.services.GameService;
 import com.example.demo.infrastructure.utils.JsonUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
@@ -14,9 +12,7 @@ import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import io.netty.util.AttributeKey;
 
-import org.apache.pekko.actor.typed.ActorRef;
 import org.apache.pekko.actor.typed.ActorSystem;
-import org.apache.pekko.actor.typed.Props;
 import org.apache.pekko.cluster.sharding.typed.javadsl.ClusterSharding;
 import org.apache.pekko.cluster.sharding.typed.javadsl.EntityRef;
 import org.springframework.stereotype.Component;
