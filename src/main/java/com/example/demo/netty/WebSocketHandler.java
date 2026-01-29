@@ -2,6 +2,7 @@ package com.example.demo.netty;
 
 import com.example.demo.actor.GameCommand;
 import com.example.demo.actor.GameSupervisor;
+import com.example.demo.actor.PlayerActor;
 import com.example.demo.game.PlayerEvent;
 import com.example.demo.game.services.GameService;
 import com.example.demo.infrastructure.utils.JsonUtil;
@@ -16,6 +17,8 @@ import io.netty.util.AttributeKey;
 import org.apache.pekko.actor.typed.ActorRef;
 import org.apache.pekko.actor.typed.ActorSystem;
 import org.apache.pekko.actor.typed.Props;
+import org.apache.pekko.cluster.sharding.typed.javadsl.ClusterSharding;
+import org.apache.pekko.cluster.sharding.typed.javadsl.EntityRef;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
@@ -26,12 +29,12 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
     private final ObjectMapper mapper;
     private final UserConnections userConnections;
     private static final AttributeKey<String> USER_ID_KEY = AttributeKey.valueOf("userId");
-    private final ActorRef<GameCommand> gameSupervisor;
+    private final ClusterSharding clusterSharding;
 
-    public WebSocketHandler(JsonUtil jsonUtil, UserConnections userConnections, ActorSystem<GameCommand> actorSystem, GameService gameService) {
+    public WebSocketHandler(JsonUtil jsonUtil, UserConnections userConnections, ActorSystem<GameCommand> actorSystem, ClusterSharding clusterSharding) {
         this.mapper = jsonUtil.mapper;
         this.userConnections = userConnections;
-        this.gameSupervisor = actorSystem.systemActorOf(GameSupervisor.create(gameService), "game-supervisor", Props.empty());
+        this.clusterSharding = clusterSharding;
     }
 
     @Override
@@ -52,7 +55,8 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
             String eventType = node.has("t") ? node.get("t").asText() : "unknown";
             JsonNode payloadNode = node.has("p") ? node.get("p") : mapper.createObjectNode();
             String userId = ctx.channel().attr(USER_ID_KEY).get();
-            gameSupervisor.tell(new PlayerEvent(userId, eventType, payloadNode.toString()));
+            EntityRef<GameCommand> playerRef = clusterSharding.entityRefFor(PlayerActor.TYPE_KEY, userId);
+            playerRef.tell(new PlayerEvent(userId, eventType, payloadNode.toString()));
         } catch (Exception e) {
             e.printStackTrace();
         }

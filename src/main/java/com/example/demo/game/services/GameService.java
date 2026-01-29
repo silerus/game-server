@@ -1,10 +1,7 @@
 package com.example.demo.game.services;
 
 import com.example.demo.game.Action;
-import com.example.demo.game.PlayerEvent;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -12,11 +9,9 @@ import java.util.Map;
 @Component
 public class GameService {
     private final Map<Action, Service> actions;
-    private final List<PlayerEvent> playerEvents;
 
     public GameService(List<Service> services) {
         this.actions = mapServices(services);
-        this.playerEvents = new ArrayList<>();
     }
 
     private Map<Action, Service> mapServices(List<Service> services) {
@@ -29,23 +24,8 @@ public class GameService {
         return map;
     }
 
-    public void processTick() {
-        for (PlayerEvent event : playerEvents) {
-            try {
-                Action action = Action.valueOf(event.eventType);
-                Service service = actions.get(action);
-                if (service != null) {
-                    service.run(event);
-                }
-            } catch (Throwable e) {
-            }
-        }
-        playerEvents.clear();
-    }
-
-
-    public void enqueueEvent(PlayerEvent playerEvent) {
-        this.playerEvents.add(playerEvent);
+    public Service getServiceFor(Action action) {
+        return actions.get(action);
     }
 
 }

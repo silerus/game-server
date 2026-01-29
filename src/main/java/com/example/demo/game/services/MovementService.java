@@ -14,6 +14,6 @@ public class MovementService implements Service {
 
     @Override
     public void run(PlayerEvent player) {
-
+        System.out.println(player);
     }
 }

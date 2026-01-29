@@ -194,6 +194,21 @@
             <artifactId>pekko-slf4j_${scala.binary.version}</artifactId>
             <version>1.4.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.pekko</groupId>
+            <artifactId>pekko-cluster-sharding-typed_${scala.binary.version}</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pekko</groupId>
+            <artifactId>pekko-cluster-typed_${scala.binary.version}</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pekko</groupId>
+            <artifactId>pekko-remote_${scala.binary.version}</artifactId>
+            <version>1.4.0</version>
+        </dependency>
     </dependencies>
 
     <build>
